@@ -1,13 +1,32 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  const [value, setValue] = useState(10)
+  const [formValue, setFormValue] = useState("")
+  const [todoList, setTodoList] = useState([])
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    setTodoList([
+      ...todoList,
+      formValue
+    ])
+    setFormValue("")
+  }
+  const handleDelete = (listItem) => setTodoList(todoList.filter(currentValue => currentValue !== listItem))
   return (
     <>
       <h1>To Do App</h1>
-      <p>Value is: {value}</p>
-      <button onClick={() => setValue(value - 1)}>Decrement</button>
-      <button onClick={() => setValue(value + 1)}>Increment</button>
+      <form onSubmit={handleSubmit}>
+        <input value={formValue} onChange={(event) => setFormValue(event.target.value)} />
+      </form>
+      <button onClick={() => setTodoList([])}>clearList</button>
+      <ul>
+        {todoList.map(listItem => (
+          <li>
+            {listItem}
+            <button onClick={() =>handleDelete(listItem)}>delete</button>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
